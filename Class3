@@ -1,0 +1,63 @@
+-- CLASS 03
+
+-- single line comments
+/* multi
+line
+comment */
+
+-- select statements, * means all columns
+SELECT * FROM brands;
+
+SELECT * FROM customers;
+
+-- specify specific colums
+SELECT first_name, last_name FROM customers;
+
+-- WHERE clause
+SELECT customer_id, first_name, last_name FROM customers WHERE customer_id >= 100;
+
+SELECT * FROM customers WHERE state = 'NY';
+SELECT * FROM customers WHERE state <> 'NY'; -- <> means NOT EQUAL TO
+
+-- 
+SELECT customer_id, state FROM customers WHERE state = 'CA' OR state = 'TX';
+SELECT customer_id, state FROM customers WHERE state IN ('CA', 'TX');
+SELECT customer_id, state FROM customers WHERE state NOT IN ('NY');
+
+-- AGGREGATE FUNCTIONS
+/* only applies to values that are not NULL */
+SELECT COUNT(customer_id) FROM customers WHERE state IN ('NY');
+SELECT MIN(list_price) AS min_value, MAX(list_price) AS max_value, AVG(list_price) AS avg_value FROM order_items;
+
+-- Literal values
+SELECT product_id, list_price, list_price + 10, (10*7), 'CAD' FROM order_items;
+
+-- DISTINCT fetch unique values
+SELECT DISTINCT(product_id) FROM order_items;
+SELECT DISTINCT(product_id), quantity FROM order_items;
+
+-- price is BETWEEN 500 and 1500 inclusive 
+SELECT product_id, product_name, list_price 
+FROM products
+WHERE list_price BETWEEN 500 AND 1500;
+-- WHERE list_price >= 500 AND list_price <= 1500;
+
+
+SELECT customer_id, first_name, last_name, email, street 
+FROM customers
+WHERE email LIKE '%c__';
+
+/* Possible LIKE options
+% wildcard zero or more
+_ wildcard one character
+'%Drive%' ==> shop must show up anywhere
+'%Drive'	==>	end in shop
+'2%'	==>	start with q
+'%il.___%'	==> must have at least 3 character _ after the co.
+*/
+
+-- ORDER BY
+SELECT product_id, product_name, model_year, list_price
+FROM products
+WHERE list_price > 1000
+ORDER BY model_year DESC, list_price ASC;
