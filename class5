@@ -1,0 +1,35 @@
+-- create table
+CREATE TABLE category (
+    categoryId INT PRIMARY KEY IDENTITY(14, 7),
+    categoryName VARCHAR(50)
+)
+
+-- alter table to accomodate categories
+ALTER TABLE bookSteph ADD categoryId int;
+
+-- foreign key constraint
+ALTER TABLE bookSteph 
+ADD FOREIGN KEY (categoryId) REFERENCES category(categoryId)
+
+-- Create view
+CREATE VIEW bookPages AS 
+    SELECT title, totalPages FROM bookSteph;
+
+-- Views act as table - only accessing that views data
+SELECT bookId FROM bookPages;
+
+CREATE VIEW bookAuthor AS  
+    SELECT bookSteph.title, Customers.first_name
+    FROM bookSteph, Customers
+    WHERE bookSteph.author = Customers.customer_id;
+
+SELECT * FROM bookAuthor;
+
+-- Update a view by deleting it (DROP) and re-creating it (CREATE)
+DROP VIEW bookAuthor;
+CREATE VIEW bookAuthor AS  
+    SELECT bookSteph.title, Customers.first_name AS author
+    FROM bookSteph, Customers
+    WHERE bookSteph.author = Customers.customer_id;
+
+SELECT * FROM bookAuthor;
