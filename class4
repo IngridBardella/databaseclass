@@ -1,0 +1,163 @@
+/*
+-- Create a table named bookSteph
+ CREATE TABLE bookSteph (
+    -- add colums to my table
+    bookId INT IDENTITY(1,1) PRIMARY KEY, -- start, step
+    title VARCHAR(200) NOT NULL,
+    isbn INT NOT NULL,
+    plot TEXT  
+);
+
+-- DROP TABLE bookSteph;
+
+-- ALTER table colums
+ALTER TABLE bookSteph 
+ALTER COLUMN isbn VARCHAR(20) NOT NULL;
+
+-- ADD new column
+ALTER TABLE bookSteph
+ADD totalPages INT DEFAULT 0;
+
+
+ALTER TABLE bookSteph
+ADD author INT NOT NULL;
+
+ALTER TABLE bookSteph
+ADD FOREIGN KEY (author) REFERENCES Customers(customer_id);
+
+
+
+IF THE TABLE WERE CREATED WITH THE ALTER COMMANDS IN PLACE
+ CREATE TABLE bookSteph (
+    -- add colums to my table
+    bookId INT IDENTITY(1,1) PRIMARY KEY, -- start, step
+    title VARCHAR(200) NOT NULL,
+    isbn VARCHAR(20) NOT NULL,
+    plot TEXT,
+    totalPages INT DEFAULT 0,
+    author INT NOT NULL
+
+    FOREIGN KEY (author) REFERENCES Customers(customer_id)
+);
+
+
+-- Add check constraint
+ALTER TABLE bookSteph
+ADD CHECK (totalPages > 10);
+
+-- Remove a column
+ALTER TABLE bookSteph
+DROP COLUMN plot;
+
+ALTER TABLE bookSteph DROP COLUMN isbn;
+
+INSERT INTO bookSteph (title, totalPages) VALUES ('Hooray for Databases', 30);
+
+SELECT * FROM bookSteph;
+
+-- ADD DEFAULT CONTRAINS
+ALTER TABLE bookSteph
+ADD CONSTRAINT DF_author DEFAULT 3 FOR author;
+
+-- ADD Unique Constraint
+ALTER TABLE bookSteph
+ADD CONSTRAINT UN_title UNIQUE (title);
+
+*/
+DROP TABLE bookSteph;
+ CREATE TABLE bookSteph (
+    -- add colums to my table
+    bookId INT IDENTITY(1,1) PRIMARY KEY, -- start, step
+    title VARCHAR(200) NOT NULL UNIQUE,
+    totalPages INT DEFAULT 0,
+    author INT DEFAULT 3,
+
+    FOREIGN KEY (author) REFERENCES Customers(customer_id),
+    CHECK (totalPages > 10)
+);
+
+
+
+/*
+-- Create a table named bookSteph
+ CREATE TABLE bookSteph (
+    -- add colums to my table
+    bookId INT IDENTITY(1,1) PRIMARY KEY, -- start, step
+    title VARCHAR(200) NOT NULL,
+    isbn INT NOT NULL,
+    plot TEXT  
+);
+
+-- DROP TABLE bookSteph;
+
+-- ALTER table colums
+ALTER TABLE bookSteph 
+ALTER COLUMN isbn VARCHAR(20) NOT NULL;
+
+-- ADD new column
+ALTER TABLE bookSteph
+ADD totalPages INT DEFAULT 0;
+
+
+ALTER TABLE bookSteph
+ADD author INT NOT NULL;
+
+ALTER TABLE bookSteph
+ADD FOREIGN KEY (author) REFERENCES Customers(customer_id);
+
+
+
+IF THE TABLE WERE CREATED WITH THE ALTER COMMANDS IN PLACE
+ CREATE TABLE bookSteph (
+    -- add colums to my table
+    bookId INT IDENTITY(1,1) PRIMARY KEY, -- start, step
+    title VARCHAR(200) NOT NULL,
+    isbn VARCHAR(20) NOT NULL,
+    plot TEXT,
+    totalPages INT DEFAULT 0,
+    author INT NOT NULL
+
+    FOREIGN KEY (author) REFERENCES Customers(customer_id)
+);
+
+
+-- Add check constraint
+ALTER TABLE bookSteph
+ADD CHECK (totalPages > 10);
+
+-- Remove a column
+ALTER TABLE bookSteph
+DROP COLUMN plot;
+
+ALTER TABLE bookSteph DROP COLUMN isbn;
+
+INSERT INTO bookSteph (title, totalPages) VALUES ('Hooray for Databases', 30);
+
+SELECT * FROM bookSteph;
+
+-- ADD DEFAULT CONTRAINS
+ALTER TABLE bookSteph
+ADD CONSTRAINT DF_author DEFAULT 3 FOR author;
+
+-- ADD Unique Constraint
+ALTER TABLE bookSteph
+ADD CONSTRAINT UN_title UNIQUE (title);
+
+*/
+DROP TABLE bookSteph;
+
+ CREATE TABLE bookSteph (
+    -- add colums to my table
+    bookId INT IDENTITY(1,1) PRIMARY KEY, -- start, step
+    title VARCHAR(200) NOT NULL UNIQUE,
+    totalPages INT DEFAULT 0,
+    author INT DEFAULT 3,
+
+    FOREIGN KEY (author) REFERENCES Customers(customer_id),
+    CHECK (totalPages > 10)
+);
+
+
+
+-- delete all the rows in the table - without altering the structure
+TRUNCATE TABLE bookSteph;
