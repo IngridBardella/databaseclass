@@ -1,0 +1,46 @@
+-- CLASS 10 MySQL
+
+-- STRING
+SELECT UPPER(contactFirstName), LOWER(contactLastName) FROM customers;
+
+SELECT UPPER('k8u6R4');
+
+SELECT contactLastName, LENGTH(contactLastName) FROM customers WHERE LENGTH(contactLastName) > 7;
+
+SELECT SUBSTRING(productName, 5) FROM products WHERE productName LIKE '____ %';
+
+-- case-sensitive
+SELECT REPLACE(productName, 'Ford', '----') FROM products;
+
+-- NUMERIC
+SELECT ROUND(7.5), CEIL(82.373), FLOOR(9.8201), ABS(-3123.31), PI();
+
+-- COALESCE = replace NULL values with something else
+SELECT customers.customerName, 
+	FORMAT( COALESCE( SUM( payments.amount ), 0), 2) AS paid
+FROM customers
+LEFT JOIN payments ON customers.customerNumber = payments.customerNumber
+GROUP BY customers.customerNumber
+ORDER BY 2;
+
+SELECT employeeNumber, firstName, COALESCE(reportsTo, 'NOBODY!!!') FROM employees;
+
+-- DATE TIME
+SELECT NOW(), CURRENT_TIMESTAMP;
+
+SELECT * FROM payments WHERE checkNumber = 'theu8s6' LIMIT 10;
+INSERT INTO payments (customerNumber, checkNumber, paymentDate, amount) VALUES 
+(112, UPPER('theu8s6'), NOW(), 100);
+
+-- Display date in a specific format
+SELECT checkNumber, DATE_FORMAT(paymentDate,'%M %d %Y'), paymentDate FROM payments;
+
+-- USERS AND PRIVILEDGES - we don't have the privileges on our free database
+-- Create a new user in our database along with a password
+CREATE USER 'ninja09'@'localhost' IDENTIFIED BY 'password';
+
+-- Give a user access to preform an action on a given database
+GRANT INSERT ON freedb_fsd_db.offices TO 'ninja09'@'localhost';
+
+-- Remove previously provided access to a user to preform an action
+REVOKE SELECT ON freedb_fsd_db.* FROM 'ninja09'@'localhost';
