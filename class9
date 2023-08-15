@@ -1,0 +1,106 @@
+/* CLASS 09 - MySQL */
+
+-- Change to your database name
+USE freedb_fsd_09;
+
+-- 2 tables on seperate rows
+SELECT firstName, lastName FROM employees
+UNION
+SELECT contactFirstName, contactLastName FROM customers;
+
+SELECT firstName, lastName, officeCode FROM employees;
+SELECT officeCode, phone, territory FROM offices;
+
+-- this will return every employee with every office combination
+SELECT employees.firstName, employees.lastName, offices.phone, offices.territory, 
+	employees.officeCode, offices.officeCode
+FROM employees, offices;
+
+-- create the relationship
+SELECT employees.firstName, employees.lastName, offices.phone, offices.territory, 
+	employees.officeCode, offices.officeCode
+FROM employees, offices
+WHERE employees.officeCode = offices.officeCode;
+
+-- cross join equivalent
+SELECT e1.firstName, e1.lastName, e1.reportsTo
+FROM employees AS e1;
+
+-- Losing date - someone who reports to nobody
+SELECT e1.firstName, e1.lastName, e2.firstName AS boss
+FROM employees AS e1, employees AS e2
+WHERE e1.reportsTo = e2.employeeNumber;
+
+-- not the way to do it! DO NOT DO THIS!!!!!!!
+SELECT e1.firstName, e1.lastName, e2.firstName AS boss
+FROM employees AS e1, employees AS e2
+WHERE e1.reportsTo = e2.employeeNumber
+UNION
+SELECT e1.firstName, e1.lastName, 'NO ONE'
+FROM employees AS e1
+WHERE e1.reportsTo IS NULL;
+
+
+-- Fetch all customers that have order
+SELECT customers.customerNumber, customers.customerName, orders.orderNumber, orders.status
+FROM customers
+INNER JOIN orders ON customers.customerNumber = orders.customerNumber
+WHERE customers.customerNumber = 406;
+
+-- also the same but the JOIN should be used
+SELECT customers.customerNumber, customers.customerName, orders.orderNumber, orders.status
+FROM customers, orders 
+WHERE customers.customerNumber = orders.customerNumber AND customers.customerNumber = 406;
+
+-- Fetch all customers and their sales rep (if they have one)
+SELECT customers.customerName, employees.firstName, employees.lastName 
+FROM customers
+INNER JOIN employees ON employees.employeeNumber = customers.salesRepEmployeeNumber;
+
+-- Emulating a full join
+SELECT customers.customerName, employees.firstName, employees.lastName 
+FROM customers
+LEFT JOIN employees ON employees.employeeNumber = customers.salesRepEmployeeNumber
+UNION
+SELECT customers.customerName, employees.firstName, employees.lastName 
+FROM customers
+RIGHT JOIN employees ON employees.employeeNumber = customers.salesRepEmployeeNumber;
+
+-- CROSS JOIN - every combination of rows between tables
+SELECT offices.city, productlines.productLine
+FROM offices
+CROSS JOIN productlines;
+
+SELECT offices.city, productlines.productLine FROM offices, productlines;
+
+-- total payment amount for each customer
+SELECT customers.customerName, SUM(payments.amount) AS paid
+FROM customers
+LEFT JOIN payments ON customers.customerNumber = payments.customerNumber
+GROUP BY customers.customerNumber
+ORDER BY 2;
+
+-- Retrieve the full name of every employee and the full name of every person they report to. (Order the resutls by the last name of the person reported to)
+SELECT CONCAT(e.firstName, ' ', e.lastName) AS employee, CONCAT(r.firstName, ' ', r.lastName) AS boss 
+FROM employees AS e
+LEFT JOIN employees AS r ON e.reportsTo = r.employeeNumber
+ORDER BY r.lastName;
+
+-- Retrieve the order number, status, customer name and slaes rep full name (in a single column) for all orders where the customers have a credit limit highter than 100,000
+SELECT orders.orderNumber, orders.status, customers.customerName, CONCAT(employees.firstName, ' ', employees.lastName) AS salesRep
+FROM orders
+INNER JOIN customers ON orders.customerNumber = customers.customerNumber
+LEFT JOIN employees ON employees.employeeNumber = customers.salesRepEmployeeNumber
+WHERE customers.creditLimit > 100000;
+
+
+SELECT * FROM orderdetails;
+SELECT * FROM offices;
+
+-- MySQL does not care about relationships, it does what it's told to do.s
+SELECT o.officeCode, o.city, od.productCode, od.orderLineNumber
+FROM offices AS o
+INNER JOIN orderdetails AS od ON od.orderLineNumber = o.officeCode
+LIMIT 5;
+
+SELECT * FROM offices;
