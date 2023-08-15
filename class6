@@ -1,0 +1,124 @@
+
+
+SELECT * FROM category;
+-- single inserts
+INSERT INTO category (categoryName) VALUES ('Fiction');
+
+INSERT INTO category (categoryName) VALUES ('Non-Fiction');
+
+-- insert multiple rows
+INSERT INTO category (categoryName) VALUES 
+('Comedy'), 
+('Drama'),
+('History');
+
+
+INSERT INTO bookSteph (title, totalPages, author, categoryId) VALUES
+('Monday Mornings', 77, 2, 28);
+
+SELECT * FROM bookSteph;
+
+INSERT INTO bookSteph (title, totalPages, author, categoryId) VALUES
+('Tuesday FunDay', 182, 1, 35),
+('Wednesday Winter', 82, 2, 35);
+
+
+INSERT INTO bookSteph (author, totalPages, categoryId, title) VALUES
+(3, 90, 21, 'Thursday Thirsty');
+
+-- withour column names
+INSERT INTO category VALUES ('Fantasy')
+
+INSERT INTO bookSteph VALUES
+('Fun Friday', 988, 1, 35)
+
+-- omitted column names must provide correct column count
+INSERT INTO bookSteph VALUES ('Sunny Saturday', 1, 3); --error
+
+-- omitted column names must provide correct column count
+INSERT INTO bookSteph (title, totalPages, author) VALUES 
+('Sunny Saturday', 100, 3); -- no error because we defined our columns
+
+INSERT INTO bookSteph (title, totalPages) VALUES
+('Sunday Oh No!', 99),
+('Weekends are short', 77);
+
+-- insert null value
+SELECT * FROM category;
+INSERT INTO category (categoryName) VALUES (null);
+
+-- insert into a view with SINGLE table
+SELECT * FROM bookPages;
+INSERT INTO bookPages VALUES ('Monday Monday', 333);
+-- with all the given constrains, this words
+/* TRANSLATES INTO THE FOLLOWING 
+    INSERT INTO bookSteph (title, totalPages) VALUE ('Monday Monday', 333);
+    | ID | 'Monday Monday' | 333 | 3 | null |
+*/
+-- cannot insert into a view using multiple tables
+SELECT * FROM bookAuthor;
+INSERT INTO bookAuthor VALUES ('Monday Monday', 'Jenn');
+
+
+
+-- UPDATE
+SELECT * FROM category;
+
+-- Update EVERY SINGLE ROW
+UPDATE category SET categoryName = 'Comics';
+-- update specific row based on where clause
+UPDATE category SET categoryName = 'Fiction' WHERE categoryId = 14;
+UPDATE category SET categoryName = 'Non-Fiction' WHERE categoryId = 21;
+UPDATE category SET categoryName = 'Drama' WHERE categoryId > 100;
+
+SELECT * FROM bookSteph;
+UPDATE bookSteph SET title = 'Fun with Java', totalPages = 1100 
+    WHERE bookId = 2;
+
+UPDATE bookSteph SET categoryID = 21 
+    WHERE categoryId >= 35 AND author = 2;
+
+UPDATE bookSteph SET totalPages = (totalPages + 13), author = 2 WHERE bookId IN (15,16,18);
+
+SELECT totalPages, totalPages+10 FROM bookSteph WHERE totalPages >80;
+
+UPDATE bookSteph SET categoryId = 70 WHERE bookId BETWEEN 12 AND 16;
+
+
+SELECT * FROM bookSteph;
+SELECT * FROM Customers;
+
+-- update using subselect
+UPDATE bookSteph SET totalPages = 222 
+    WHERE author IN (SELECT customer_id FROM Customers WHERE first_name = 'Arthur');
+    -- WHERE author IN (1)
+
+UPDATE bookSteph SET totalPages = 444
+    WHERE author IN (SELECT customer_id FROM Customers WHERE first_name LIKE 'A%');
+    -- WHERE author IN (1, 6);
+
+-- LIKE condition
+SELECT * FROM Customers WHERE first_name LIKE '_a%';
+
+SELECT * FROM bookSteph WHERE title LIKE '%day'; -- at the end
+SELECT * FROM bookSteph WHERE title LIKE 'day%'; -- at the start
+
+SELECT * FROM bookSteph WHERE title LIKE '%day%'; -- anywhere
+
+SELECT * FROM bookSteph WHERE title LIKE '___day%'; -- must be 4th, 5th, 6th letter
+SELECT * FROM bookSteph WHERE title LIKE '%e_'; -- e must be the before last letter
+
+
+-- DELETE
+DELETE FROM Category; -- Delete every row
+TRUNCATE TABLE Category; -- Delete every row and reset auto-incrementing fields
+
+SELECT * FROM bookSteph;
+INSERT INTO Category VALUES ('Fiction'), ('Non-Fiction'), ('Drama'), ('Historical');
+
+SELECT * FROM bookSteph;
+DELETE FROM bookSteph WHERE author = 1;
+
+ALTER TABLE bookSteph
+
+DELETE FROM Customers; -- error due to constrains
